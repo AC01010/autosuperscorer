@@ -1,20 +1,28 @@
+import numpy as np
+import pandas as pd
 from operator import itemgetter
 import sys
 import getopt
 def main(argv):
     try:
-        o, a = getopt.getopt(argv,"i:d:")
+        o, a = getopt.getopt(argv,"i:d:w:")
     except getopt.GetoptError:
-        print ('Usage: autosuperscorer.py -i <inputfile> -d <drops>')
+        print ('Usage: autosuperscorer.py -i <inputfile> -d <drops> -w <link>')
         sys.exit(0)
-    if len(o)!=2:
-        print ('Usage: autosuperscorer.py -i <inputfile> -d <drops>')
-        sys.exit(0)
+    if "-d" not in dict(o):
+        drops = 0
     for o1, a1 in o:
         if o1 in ("-i"):
             inp = a1
         elif o1 in ("-d"):
             drops = int(a1)
+        elif o1 in ("-w"):
+            result = pd.read_html(a1)[0]
+            result.drop(result.tail(1).index, inplace=True)
+            inp = a1.split("/")[3]+".txt"
+            file2 = open(inp,"w")
+            file2.write(result.to_csv(index = False, sep="\t"))
+            file2.close()
     file = open(inp,"r")
     events = file.readline().strip().split("\t")
     results = file.read().strip().split("\n")
@@ -47,7 +55,7 @@ def main(argv):
             if event not in trialIndex:
                 temp = []
                 for team in teams[school]:
-                    temp.append(int(team[event]))
+                    temp.append(int(str(team[event]).split(".")[0]))
                 super.append(min(temp))
         super[2]=sum(super[3:])
         teams[school]=super
