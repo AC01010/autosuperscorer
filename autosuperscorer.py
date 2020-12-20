@@ -5,10 +5,10 @@ def main(argv):
     try:
         o, a = getopt.getopt(argv,"i:d:")
     except getopt.GetoptError:
-        print ('Usage: test.py -i <inputfile> -d <drops>')
+        print ('Usage: autosuperscorer.py -i <inputfile> -d <drops>')
         sys.exit(0)
     if len(o)!=2:
-        print ('Usage: test.py -i <inputfile> -d <drops>')
+        print ('Usage: autosuperscorer.py -i <inputfile> -d <drops>')
         sys.exit(0)
     for o1, a1 in o:
         if o1 in ("-i"):
